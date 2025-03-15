@@ -26,7 +26,7 @@ except FileExistsError:
 with open(json_filename, "r", encoding="utf-8") as file:
     country_city_data = json.load(file)
 
-def get_weather(city, country, selected_weather):
+def get_weather(city, country):
     if not city or not country:
         st.error("Please select both country and city.")
         return
@@ -44,16 +44,13 @@ def get_weather(city, country, selected_weather):
         weather_desc = data["weather"][0]["description"].capitalize()
         temp = data["main"]["temp"]
         
-        st.success(f"**Weather:** {weather_desc}\n\n**Temperature:** {temp}°C\n\n**Selected Season:** {selected_weather}")
+        st.success(f"**Weather:** {weather_desc}\n\n**Temperature:** {temp}°C")
     
     except Exception as e:
         st.error(f"Could not retrieve weather data: {e}")
 
 # Streamlit UI
 st.title("Weather App")
-
-# Season selection dropdown
-selected_weather = st.selectbox("Select Season:", ["Summer", "Winter", "Spring", "Autumn"])
 
 # Country selection dropdown
 countries = list(country_city_data.keys())
@@ -64,4 +61,4 @@ cities = country_city_data.get(selected_country, [])
 selected_city = st.selectbox("Select City:", cities)
 
 if st.button("Get Weather"):
-    get_weather(selected_city, selected_country, selected_weather)
+    get_weather(selected_city, selected_country)
